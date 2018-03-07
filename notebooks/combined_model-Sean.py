@@ -4,7 +4,7 @@
 # Training the model that takes the complete sequence and the evaluation calculates AUCs on separate task IDs. <br>
 # Evaluation method stays the same as separate_models.ipynb
 
-# In[1]:
+# In[5]:
 
 
 import json
@@ -16,15 +16,21 @@ import math
 import random
 import matplotlib.pyplot as plt
 from collections import Counter
+import pickle
+def save_obj(obj, name ):
+    with open(name + '.pkl', 'wb') as f:
+        pickle.dump(obj, f)
 
 
 # This code can work with tf.VERSION = '1.4.1' (for MacOS High Sierra); functions may change for other versions.
 
 # Model Parameters:
 
-# In[2]:
+# In[6]:
 
 
+a = {'blue':'green'}
+save_obj(a,'a')
 training_set_split = 0.8
 validation_set_split = 0.1
 #learning_rate = np.logspace(-5,0,5)
@@ -46,7 +52,7 @@ print("Tensorflow version: " + str(tf.VERSION))
 # In[ ]:
 
 
-filepath2 = "../data/student_vectors_n_task_10_n_limit_100000.json"
+filepath2 = "student_vectors_n_task_10_n_limit_100000.json"
 student_vectors = json.load(open(filepath2))
 
 
@@ -152,11 +158,11 @@ for i in student_vectors:
             cnt2[another_2[j['task_id']]] += 1
     for k in seqlen_tasks:
         seqlen_tasks[k].append(temp_seqlen[k])
-plt.bar(cnt2.keys(), cnt2.values())
-plt.title("Task IDs distribution")
-plt.xlabel("Frequency of task ID across all students")
-plt.ylabel("Task IDs")
-plt.show()
+# plt.bar(cnt2.keys(), cnt2.values())
+# plt.title("Task IDs distribution")
+# plt.xlabel("Frequency of task ID across all students")
+# plt.ylabel("Task IDs")
+# plt.show()
 print("Task IDs mapping: ")
 for i in another_2:
     print("Task ID -> "+str(i)+"("+str(another_2[i])+") is attempted " + str(cnt2[another_2[i]]) + " times." + " Max seq len: "+str(max(seqlen_tasks[i])))
@@ -540,78 +546,81 @@ for i in another_2:
 # In[ ]:
 
 
-fig=plt.figure(figsize=(14, 9), dpi= 80, facecolor='w', edgecolor='k')
-plt.plot([0, 1], [0, 1], 'k--')
-plt.xlim([0.0, 1.0])
-plt.ylim([0.0, 1.05])
-plt.xlabel('False Positive Rate')
-plt.ylabel('True Positive Rate')
-plt.title('ROC Bayesian Knowledge Tracing (combined model, test set)')
+# fig=plt.figure(figsize=(14, 9), dpi= 80, facecolor='w', edgecolor='k')
+# plt.plot([0, 1], [0, 1], 'k--')
+# plt.xlim([0.0, 1.0])
+# plt.ylim([0.0, 1.05])
+# plt.xlabel('False Positive Rate')
+# plt.ylabel('True Positive Rate')
+# plt.title('ROC Bayesian Knowledge Tracing (combined model, test set)')
 
-for task_id in another_2:
-    roc = calculate_auc(true_all_tasks['test'][task_id][-1] , predictions_all_tasks['test'][task_id][-1] , seqlen_all_tasks['test'][task_id][-1],plot=True)
-    plt.plot(roc[1], roc[2], label=task_id)
+# for task_id in another_2:
+#     roc = calculate_auc(true_all_tasks['test'][task_id][-1] , predictions_all_tasks['test'][task_id][-1] , seqlen_all_tasks['test'][task_id][-1],plot=True)
+#     plt.plot(roc[1], roc[2], label=task_id)
 
-roc = calculate_auc(true_all_tasks['test']['overall'][-1],predictions_all_tasks['test']['overall'][-1],seqlen_all_tasks['test']['overall'][-1],plot=True)
-plt.plot(roc[1], roc[2], label='overall-test')
+# roc = calculate_auc(true_all_tasks['test']['overall'][-1],predictions_all_tasks['test']['overall'][-1],seqlen_all_tasks['test']['overall'][-1],plot=True)
+# plt.plot(roc[1], roc[2], label='overall-test')
 
-plt.legend(loc="lower right")
-plt.savefig('combined1.png')
-
-
-# In[ ]:
-
-
-fig=plt.figure(figsize=(14, 9), dpi= 80, facecolor='w', edgecolor='k')
-plt.plot([0, 1], [0, 1], 'k--')
-plt.xlim([0.0, 1.0])
-plt.ylim([0.0, 1.05])
-plt.xlabel('False Positive Rate')
-plt.ylabel('True Positive Rate')
-plt.title('ROC Bayesian Knowledge Tracing (combined model, Train set)')
-
-for task_id in another_2:
-    roc = calculate_auc(true_all_tasks['train'][task_id][-1],predictions_all_tasks['train'][task_id][-1], seqlen_all_tasks['train'][task_id][-1], plot=True)
-    plt.plot(roc[1], roc[2], label=task_id)
-
-roc = calculate_auc(true_all_tasks['train']['overall'][-1],predictions_all_tasks['train']['overall'][-1],seqlen_all_tasks['train']['overall'][-1],plot=True)
-plt.plot(roc[1], roc[2], label='overall-train')
-
-plt.legend(loc="lower right")
-plt.savefig('combined2.png')
+# plt.legend(loc="lower right")
+# plt.savefig('combined1.png')
+save_obj(true_all_tasks,"true_all_tasks")
+save_obj(predictions_all_tasks,"predictions_all_tasks")
+save_obj(seqlen_all_tasks,"seqlen_all_tasks")
 
 
 # In[ ]:
 
 
-fig, axs = plt.subplots(6,2, figsize=(20, 30), facecolor='w', edgecolor='k')
-fig.subplots_adjust(hspace = .5, wspace=0.1)
+# fig=plt.figure(figsize=(14, 9), dpi= 80, facecolor='w', edgecolor='k')
+# plt.plot([0, 1], [0, 1], 'k--')
+# plt.xlim([0.0, 1.0])
+# plt.ylim([0.0, 1.05])
+# plt.xlabel('False Positive Rate')
+# plt.ylabel('True Positive Rate')
+# plt.title('ROC Bayesian Knowledge Tracing (combined model, Train set)')
 
-axs = axs.ravel()
+# for task_id in another_2:
+#     roc = calculate_auc(true_all_tasks['train'][task_id][-1],predictions_all_tasks['train'][task_id][-1], seqlen_all_tasks['train'][task_id][-1], plot=True)
+#     plt.plot(roc[1], roc[2], label=task_id)
 
-for i,value in enumerate(another_2):
-    train_auc = seqlen_all_tasks['train'][value][:-1]
-    test_auc = seqlen_all_tasks['test'][value][:-1]
-    axs[i-1].plot(test_auc,label='test')
-    axs[i-1].plot(train_auc,label='train')
-    axs[i-1].set_ylim(0,1.1)
-    axs[i-1].set_xlim(0,12)
-    axs[i-1].set_xlabel("Epochs")
-    axs[i-1].set_ylabel("AUC")
-    axs[i-1].legend(loc="best")
-    axs[i-1].set_title("Task ID = "+str(value))
+# roc = calculate_auc(true_all_tasks['train']['overall'][-1],predictions_all_tasks['train']['overall'][-1],seqlen_all_tasks['train']['overall'][-1],plot=True)
+# plt.plot(roc[1], roc[2], label='overall-train')
+
+# plt.legend(loc="lower right")
+# plt.savefig('combined2.png')
+
+
+# In[ ]:
+
+
+# fig, axs = plt.subplots(6,2, figsize=(20, 30), facecolor='w', edgecolor='k')
+# fig.subplots_adjust(hspace = .5, wspace=0.1)
+
+# axs = axs.ravel()
+
+# for i,value in enumerate(another_2):
+#     train_auc = seqlen_all_tasks['train'][value][:-1]
+#     test_auc = seqlen_all_tasks['test'][value][:-1]
+#     axs[i-1].plot(test_auc,label='test')
+#     axs[i-1].plot(train_auc,label='train')
+#     axs[i-1].set_ylim(0,1.1)
+#     axs[i-1].set_xlim(0,12)
+#     axs[i-1].set_xlabel("Epochs")
+#     axs[i-1].set_ylabel("AUC")
+#     axs[i-1].legend(loc="best")
+#     axs[i-1].set_title("Task ID = "+str(value))
     
-train_auc = seqlen_all_tasks['train']['overall'][:-1]
-test_auc = seqlen_all_tasks['test']['overall'][:-1]
-axs[i].plot(test_auc,label='test')
-axs[i].plot(train_auc,label='train')
-axs[i].set_ylim(0,1.1)
-axs[i].set_xlim(0,12)
-axs[i].set_xlabel("Epochs")
-axs[i].set_ylabel("AUC")
-axs[i].legend(loc="best")
-axs[i].set_title("Overall")
-plt.savefig('combined3.png')
+# train_auc = seqlen_all_tasks['train']['overall'][:-1]
+# test_auc = seqlen_all_tasks['test']['overall'][:-1]
+# axs[i].plot(test_auc,label='test')
+# axs[i].plot(train_auc,label='train')
+# axs[i].set_ylim(0,1.1)
+# axs[i].set_xlim(0,12)
+# axs[i].set_xlabel("Epochs")
+# axs[i].set_ylabel("AUC")
+# axs[i].legend(loc="best")
+# axs[i].set_title("Overall")
+# plt.savefig('combined3.png')
 
 
 # **No longer maintained below this point.**<br>Training the model for hyperparameter (learning rate) tuning.
