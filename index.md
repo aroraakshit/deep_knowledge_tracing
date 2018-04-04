@@ -10,9 +10,6 @@ In this study, we explore the superiority of DKT by building a version of DKT th
 
 We trained the network in two ways, either presenting a single sequence for each learner that involved trials of many different skills, or a separate sequence for each learner and each skill. Combining predictions across skills for each model, we estimate the prediction quality via the AUC. The results indicate that the inductive bias of BKT could be helpful for the model's performance. The BKT model has relatively few parameters to be tuned and in this way well constrained by the data.
 
-# Publications
-- **[Does Deep Knowledge Tracing Model Interactions Among Skills?](https://github.com/aroraakshit/deep_knowledge_tracing/raw/master/deep-knowledge-tracing.pdf)**. March 2018. Poster Submission under review at [Educational Data Mining 2018](http://educationaldatamining.org/EDM2018/).
-
 # Collaborators
 1. Dr. Shirly Montero, Ph.D. student at University of Colorado Boulder [<i class="fab fa-linkedin-in"></i>](https://www.linkedin.com/in/shirly-berends-montero-8aba639/)
 2. Dr. Sean Kelly, VP Engineering and Co-Founder at Woot Math [<i class="fab fa-linkedin-in"></i>](https://www.linkedin.com/in/sean-kelly-2406baa/)
