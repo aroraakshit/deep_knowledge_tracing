@@ -3,3 +3,5 @@ description: Independent Study under the guidance of <a href="http://www.cs.colo
 show_downloads: false
 google_analytics: 'UA-109066326-3'
 theme: jekyll-theme-minimal
+url: https://aroraakshit.github.io/deep_knowledge_tracing/
+plugins: [jekyll-sitemap]
